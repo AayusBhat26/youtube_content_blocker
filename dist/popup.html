@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YouTube Content Blocker</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1>YouTube Content Blocker</h1>
+    
+    <div class="section">
+      <h2>Blocked Keywords</h2>
+      <div class="input-group">
+        <input type="text" id="keyword-input" placeholder="Enter keyword to block">
+        <button id="add-keyword">Add</button>
+      </div>
+      <ul id="keyword-list" class="list-container"></ul>
+    </div>
+    
+    <div class="section">
+      <h2>Blocked Creators</h2>
+      <div class="input-group">
+        <input type="text" id="creator-input" placeholder="Enter channel name to block">
+        <button id="add-creator">Add</button>
+      </div>
+      <ul id="creator-list" class="list-container"></ul>
+    </div>
+      <div class="footer">
+      <div class="switch-container">
+        <span>Extension enabled</span>
+        <label class="switch">
+          <input type="checkbox" id="enabled-toggle" checked>
+          <span class="slider round"></span>
+        </label>
+      </div>
+      
+      <div class="stats-container">
+        <span>Videos blocked: <span id="blocked-count">0</span></span>
+      </div>
+      
+      <div class="options-link">
+        <a href="#" id="open-options">Advanced Options</a>
+      </div>
+    </div>  </div>
+  <script src="utility.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

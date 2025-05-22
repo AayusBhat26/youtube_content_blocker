@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate Extension Icons</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    canvas {
+      border: 1px solid #ddd;
+      margin: 10px;
+    }
+    .instructions {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .icon-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .icon-item {
+      text-align: center;
+      margin: 10px;
+    }
+    button {
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #3367d6;
+    }
+  </style>
+</head>
+<body>
+  <h1>Extension Icon Generator</h1>
+  
+  <div class="instructions">
+    <h2>Instructions:</h2>
+    <p>1. The icons will be generated from the SVG in your extension directory.</p>
+    <p>2. Click "Generate Icons" to create the PNG files.</p>
+    <p>3. Right-click each icon and select "Save Image As..." to save them to your extension's icons folder.</p>
+    <p>4. Save them as icon16.png, icon48.png, and icon128.png in your icons folder.</p>
+  </div>
+  
+  <button id="generate">Generate Icons</button>
+  
+  <div class="icon-container" id="icons"></div>
+  
+  <script>
+    document.getElementById('generate').addEventListener('click', generateIcons);
+    
+    async function generateIcons() {
+      const sizes = [16, 48, 128];
+      const iconContainer = document.getElementById('icons');
+      iconContainer.innerHTML = '';
+      
+      try {
+        const response = await fetch('icons/icon.svg');
+        const svgText = await response.text();
+        
+        for (const size of sizes) {
+          const container = document.createElement('div');
+          container.className = 'icon-item';
+          
+          const canvas = document.createElement('canvas');
+          canvas.width = size;
+          canvas.height = size;
+          canvas.id = `canvas${size}`;
+          
+          const label = document.createElement('p');
+          label.textContent = `${size}x${size} icon`;
+          
+          container.appendChild(canvas);
+          container.appendChild(label);
+          iconContainer.appendChild(container);
+          
+          const ctx = canvas.getContext('2d');
+          const img = new Image();
+          
+          img.onload = function() {
+            ctx.drawImage(img, 0, 0, size, size);
+            
+            // Add a download link
+            const downloadLink = document.createElement('a');
+            downloadLink.textContent = 'Download';
+            downloadLink.href = canvas.toDataURL('image/png');
+            downloadLink.download = `icon${size}.png`;
+            container.appendChild(downloadLink);
+          };
+          
+          img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText);
+        }
+      } catch (error) {
+        console.error('Error generating icons:', error);
+        iconContainer.innerHTML = '<p>Error generating icons. Make sure the SVG file exists.</p>';
+      }
+    }
+  </script>
+</body>
+</html>

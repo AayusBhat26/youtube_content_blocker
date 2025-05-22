@@ -1,0 +1,36 @@
+{
+  "name": "youtube-content-blocker",
+  "version": "1.0.0",
+  "description": "A Chrome extension that blocks YouTube videos containing specific keywords or from specific creators",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build.js",
+    "zip": "node zip.js",
+    "lint": "eslint *.js",
+    "format": "prettier --write \"*.{js,html,css,json}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/youtube-content-blocker.git"
+  },
+  "keywords": [
+    "youtube",
+    "blocker",
+    "filter",
+    "chrome-extension",
+    "content-blocker"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/your-username/youtube-content-blocker/issues"
+  },
+  "homepage": "https://github.com/your-username/youtube-content-blocker#readme",
+  "devDependencies": {
+    "archiver": "^5.3.1",
+    "eslint": "^8.40.0",
+    "fs-extra": "^11.1.1",
+    "prettier": "^2.8.8"
+  }
+}

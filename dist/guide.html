@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YouTube Content Blocker - Quick Start Guide</title>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #cc0000;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    h2 {
+      color: #333;
+      margin: 25px 0 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    p {
+      margin-bottom: 15px;
+    }
+    
+    ul, ol {
+      margin-bottom: 20px;
+      padding-left: 25px;
+    }
+    
+    li {
+      margin-bottom: 10px;
+    }
+    
+    code {
+      background-color: #f5f5f5;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-family: Consolas, monospace;
+    }
+    
+    .tip {
+      background-color: #f0f7ff;
+      padding: 15px;
+      border-left: 4px solid #0078d7;
+      margin-bottom: 20px;
+    }
+    
+    .warning {
+      background-color: #fff5e6;
+      padding: 15px;
+      border-left: 4px solid #ff9800;
+      margin-bottom: 20px;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .screenshot {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin: 15px 0;
+    }
+    
+    .button {
+      display: inline-block;
+      background-color: #cc0000;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-top: 15px;
+    }
+    
+    .button:hover {
+      background-color: #aa0000;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>YouTube Content Blocker - Quick Start Guide</h1>
+    
+    <p>Welcome to YouTube Content Blocker! This guide will help you quickly set up and start using the extension to filter out unwanted content from your YouTube experience.</p>
+    
+    <h2>Basic Usage</h2>
+    
+    <ol>
+      <li>
+        <strong>Blocking Keywords</strong>: Any video with a title containing your specified keywords will be hidden.
+        <ul>
+          <li>Click the extension icon in your browser toolbar</li>
+          <li>Enter a keyword in the "Enter keyword to block" field</li>
+          <li>Click "Add" or press Enter</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Blocking Creators</strong>: All videos from a specific YouTube channel will be hidden.
+        <ul>
+          <li>Click the extension icon in your browser toolbar</li>
+          <li>Enter a channel name in the "Enter channel name to block" field</li>
+          <li>Click "Add" or press Enter</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Enable/Disable</strong>: Use the toggle switch at the bottom of the popup to quickly enable or disable the extension.
+      </li>
+    </ol>
+    
+    <h2>Advanced Features</h2>
+    
+    <h3>Context Menu Options</h3>
+    <p>Right-click on videos or channels to quickly block them:</p>
+    <ul>
+      <li><strong>Block This Channel</strong>: Right-click on a channel name and select this option</li>
+      <li><strong>Block Keyword From Title</strong>: Right-click on a video to block based on its title</li>
+      <li><strong>Custom Block Keyword</strong>: Add a custom keyword from anywhere on YouTube</li>
+    </ul>
+    
+    <h3>Advanced Settings</h3>
+    <p>Access more options by clicking "Advanced Options" in the extension popup:</p>
+    <ul>
+      <li><strong>Blocking Mode</strong>: Choose between hiding videos completely, blurring them, or replacing with a placeholder</li>
+      <li><strong>Keyword Matching</strong>: Select partial matching, exact matching, or whole word matching</li>
+      <li><strong>Case Sensitivity</strong>: Choose whether capitalization matters when matching keywords</li>
+      <li><strong>Performance Settings</strong>: Adjust scan intervals for optimal performance</li>
+    </ul>
+    
+    <h3>Import/Export Settings</h3>
+    <p>You can back up your settings or transfer them to another computer:</p>
+    <ul>
+      <li>Go to Advanced Options</li>
+      <li>Use the Export Settings button to save your configuration</li>
+      <li>Use the Import Settings button to load a previously saved configuration</li>
+    </ul>
+    
+    <div class="tip">
+      <strong>Tip:</strong> Combining multiple keywords and channel blocks can dramatically improve your YouTube experience. Start with a few key terms and gradually build your filter list.
+    </div>
+    
+    <div class="warning">
+      <strong>Note:</strong> If a video is blocked on the watch page, you'll see an overlay with an option to go back or view the video anyway.
+    </div>
+    
+    <h2>Troubleshooting</h2>
+    
+    <p>If videos aren't being blocked as expected:</p>
+    <ol>
+      <li>Make sure the extension is enabled (check the toggle switch)</li>
+      <li>Try refreshing the YouTube page</li>
+      <li>Check that your keywords don't have typos or extra spaces</li>
+      <li>For channels, make sure you're using the exact channel name as shown on YouTube</li>
+      <li>In Advanced Options, try using "Partial match" mode for more flexible keyword matching</li>
+    </ol>
+    
+    <p>If you encounter any bugs or have feature requests, please visit our GitHub repository to report them.</p>
+    
+    <div class="footer">
+      <p>YouTube Content Blocker v<span id="version">1.0.0</span></p>
+      <p>Thank you for using our extension!</p>
+    </div>
+  </div>
+  
+  <script src="utility.js"></script>
+  <script>
+    // Display the current version
+    document.getElementById('version').textContent = getExtensionVersion();
+  </script>
+</body>
+</html>

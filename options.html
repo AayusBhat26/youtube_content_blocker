@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YouTube Content Blocker - Options</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>YouTube Content Blocker - Advanced Options</h1>
+    </header>
+    
+    <main>
+      <section class="option-section">
+        <h2>Blocking Options</h2>
+        
+        <div class="option-group">
+          <label for="block-mode">Blocking Mode:</label>
+          <select id="block-mode">
+            <option value="hide">Hide videos (default)</option>
+            <option value="blur">Blur videos</option>
+            <option value="replace">Replace with placeholder</option>
+          </select>
+        </div>
+        
+        <div class="option-group">
+          <label for="partial-match">Keyword Matching:</label>
+          <select id="partial-match">
+            <option value="partial">Partial match (default)</option>
+            <option value="exact">Exact match only</option>
+            <option value="word">Whole word only</option>
+          </select>
+        </div>
+        
+        <div class="option-group">
+          <label for="case-sensitive">
+            <input type="checkbox" id="case-sensitive">
+            Case-sensitive matching
+          </label>
+        </div>
+      </section>
+
+      <section class="option-section">
+        <h2>Import/Export Settings</h2>
+        
+        <div class="option-group">
+          <button id="export-settings">Export Settings</button>
+          <p class="description">Download your blocked keywords and creators as a JSON file</p>
+        </div>
+        
+        <div class="option-group">
+          <label for="import-settings">Import Settings:</label>
+          <input type="file" id="import-settings" accept=".json">
+          <p class="description">Upload a previously exported settings file</p>
+        </div>
+      </section>
+
+      <section class="option-section">
+        <h2>Statistics</h2>
+        <div id="stats-container">
+          <div class="stat-item">
+            <span class="stat-label">Videos Blocked:</span>
+            <span id="blocked-count" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Last Blocked:</span>
+            <span id="last-blocked" class="stat-value">None</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Most Blocked Keyword:</span>
+            <span id="top-keyword" class="stat-value">None</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Most Blocked Creator:</span>
+            <span id="top-creator" class="stat-value">None</span>
+          </div>
+        </div>
+        <div class="option-group">
+          <button id="reset-stats">Reset Statistics</button>
+        </div>
+      </section>
+
+      <section class="option-section">
+        <h2>Performance</h2>
+        <div class="option-group">
+          <label for="scan-interval">
+            Scan Interval (milliseconds):
+            <input type="number" id="scan-interval" min="500" max="5000" step="100" value="1000">
+          </label>
+          <p class="description">How often to check for new videos (lower = more responsive, higher = better performance)</p>
+        </div>
+      </section>
+    </main>
+    
+    <footer>
+      <div class="actions">
+        <button id="save-options" class="primary-button">Save Options</button>
+        <button id="reset-options">Reset to Defaults</button>
+      </div>
+      <div class="links">
+        <a href="popup.html" target="_blank">Open Popup</a> | 
+        <a href="https://github.com/your-username/youtube-content-blocker" target="_blank">View on GitHub</a>
+      </div>    </footer>
+  </div>
+  
+  <script src="utility.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
