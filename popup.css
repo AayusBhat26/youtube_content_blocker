@@ -21,6 +21,63 @@ h1 {
   text-align: center;
 }
 
+.filter-mode-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.filter-mode-selector label {
+  margin: 0 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.filter-mode-selector label:hover {
+  background-color: #e0e0e0;
+}
+
+.filter-mode-selector input:checked + span {
+  font-weight: bold;
+}
+
+.filter-mode-selector label:first-child input:checked + span {
+  color: #cc0000;
+}
+
+.filter-mode-selector label:last-child input:checked + span {
+  color: #0077cc;
+}
+
+.filter-mode-selector input {
+  margin-right: 5px;
+}
+
+.description {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.api-note {
+  font-size: 0.8rem;
+  color: #0077cc;
+  margin-top: 12px;
+  font-style: italic;
+  background-color: #f0f7ff;
+  padding: 8px;
+  border-radius: 4px;
+  border-left: 3px solid #0077cc;
+}
+
 h2 {
   color: #333;
   font-size: 1.1rem;

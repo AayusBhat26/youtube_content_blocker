@@ -33,9 +33,11 @@ function processYouTubeVideos() {
   if (processingInProgress) return;
   processingInProgress = true;
   
-  chrome.storage.sync.get(['blockedKeywords', 'blockedCreators', 'enabled', 'options'], (result) => {
+  chrome.storage.sync.get(['blockedKeywords', 'blockedCreators', 'interestKeywords', 'filterMode', 'enabled', 'options'], (result) => {
     const blockedKeywords = result.blockedKeywords || [];
     const blockedCreators = result.blockedCreators || [];
+    const interestKeywords = result.interestKeywords || [];
+    const filterMode = result.filterMode || 'block';
     const enabled = result.enabled !== undefined ? result.enabled : true;
     
     // Update global options
@@ -43,8 +45,15 @@ function processYouTubeVideos() {
       globalOptions = { ...globalOptions, ...result.options };
     }
 
-    // Early return if disabled or no block criteria
-    if (!enabled || (blockedKeywords.length === 0 && blockedCreators.length === 0)) {
+    // Early return if disabled
+    if (!enabled) {
+      processingInProgress = false;
+      return;
+    }
+
+    // Early return if no criteria for current mode
+    if ((filterMode === 'block' && blockedKeywords.length === 0 && blockedCreators.length === 0) ||
+        (filterMode === 'show' && interestKeywords.length === 0)) {
       processingInProgress = false;
       return;
     }
@@ -53,34 +62,70 @@ function processYouTubeVideos() {
       // Process different YouTube page layouts
       if (window.location.pathname === '/') {
         // Home page
-        processHomePage(blockedKeywords, blockedCreators);
+        if (filterMode === 'block') {
+          processHomePage(blockedKeywords, blockedCreators);
+        } else {
+          processHomePageShowOnly(interestKeywords);
+        }
       } else if (window.location.pathname.startsWith('/results')) {
         // Search results
-        processSearchResults(blockedKeywords, blockedCreators);
+        if (filterMode === 'block') {
+          processSearchResults(blockedKeywords, blockedCreators);
+        } else {
+          processSearchResultsShowOnly(interestKeywords);
+        }
       } else if (window.location.pathname === '/feed/subscriptions') {
         // Subscriptions page
-        processSubscriptionsPage(blockedKeywords, blockedCreators);
+        if (filterMode === 'block') {
+          processSubscriptionsPage(blockedKeywords, blockedCreators);
+        } else {
+          processSubscriptionsPageShowOnly(interestKeywords);
+        }
       } else if (window.location.pathname === '/feed/trending') {
         // Trending page
-        processTrendingPage(blockedKeywords, blockedCreators);
+        if (filterMode === 'block') {
+          processTrendingPage(blockedKeywords, blockedCreators);
+        } else {
+          processTrendingPageShowOnly(interestKeywords);
+        }
       } else if (window.location.pathname === '/feed/explore') {
         // Explore page
-        processExplorePage(blockedKeywords, blockedCreators);
+        if (filterMode === 'block') {
+          processExplorePage(blockedKeywords, blockedCreators);
+        } else {
+          processExplorePageShowOnly(interestKeywords);
+        }
       } else if (window.location.pathname.startsWith('/watch')) {
         // Watch page - handle recommendations
-        processWatchPageRecommendations(blockedKeywords, blockedCreators);
+        if (filterMode === 'block') {
+          processWatchPageRecommendations(blockedKeywords, blockedCreators);
+        } else {
+          processWatchPageRecommendationsShowOnly(interestKeywords);
+        }
       } else if (window.location.pathname.startsWith('/channel/') || 
                 window.location.pathname.startsWith('/c/') || 
                 window.location.pathname.startsWith('/user/') ||
                 window.location.pathname.startsWith('/@')) {
         // Channel pages
-        processChannelPage(blockedKeywords, blockedCreators);
+        if (filterMode === 'block') {
+          processChannelPage(blockedKeywords, blockedCreators);
+        } else {
+          processChannelPageShowOnly(interestKeywords);
+        }
       } else if (window.location.pathname.startsWith('/shorts')) {
         // Shorts page
-        processShortsPage(blockedKeywords, blockedCreators);
+        if (filterMode === 'block') {
+          processShortsPage(blockedKeywords, blockedCreators);
+        } else {
+          processShortsPageShowOnly(interestKeywords);
+        }
       } else if (window.location.pathname.startsWith('/playlist')) {
         // Playlist page
-        processPlaylistPage(blockedKeywords, blockedCreators);
+        if (filterMode === 'block') {
+          processPlaylistPage(blockedKeywords, blockedCreators);
+        } else {
+          processPlaylistPageShowOnly(interestKeywords);
+        }
       }
     } catch (error) {
       console.error('YouTube Content Blocker: Error processing videos', error);
@@ -210,16 +255,72 @@ function processPlaylistPage(blockedKeywords, blockedCreators) {
   processVideoElements(videoElements, blockedKeywords, blockedCreators);
 }
 
-// Process a collection of video elements
-function processVideoElements(videoElements, blockedKeywords, blockedCreators) {
+// "Show Only" mode processing functions
+
+// Process home page for "Show Only" mode
+function processHomePageShowOnly(interestKeywords) {
+  const videoElements = document.querySelectorAll('ytd-rich-item-renderer, ytd-grid-video-renderer, ytd-video-renderer');
+  processVideoElementsShowOnly(videoElements, interestKeywords);
+}
+
+// Process search results for "Show Only" mode
+function processSearchResultsShowOnly(interestKeywords) {
+  const videoElements = document.querySelectorAll('ytd-video-renderer');
+  processVideoElementsShowOnly(videoElements, interestKeywords);
+}
+
+// Process subscriptions page for "Show Only" mode
+function processSubscriptionsPageShowOnly(interestKeywords) {
+  const videoElements = document.querySelectorAll('ytd-grid-video-renderer');
+  processVideoElementsShowOnly(videoElements, interestKeywords);
+}
+
+// Process trending page for "Show Only" mode
+function processTrendingPageShowOnly(interestKeywords) {
+  const videoElements = document.querySelectorAll('ytd-video-renderer');
+  processVideoElementsShowOnly(videoElements, interestKeywords);
+}
+
+// Process explore page for "Show Only" mode
+function processExplorePageShowOnly(interestKeywords) {
+  const videoElements = document.querySelectorAll('ytd-rich-grid-renderer ytd-rich-item-renderer');
+  processVideoElementsShowOnly(videoElements, interestKeywords);
+}
+
+// Process watch page recommendations for "Show Only" mode
+function processWatchPageRecommendationsShowOnly(interestKeywords) {
+  const videoElements = document.querySelectorAll('ytd-compact-video-renderer');
+  processVideoElementsShowOnly(videoElements, interestKeywords);
+}
+
+// Process channel page for "Show Only" mode
+function processChannelPageShowOnly(interestKeywords) {
+  const videoElements = document.querySelectorAll('ytd-grid-video-renderer, ytd-rich-item-renderer');
+  processVideoElementsShowOnly(videoElements, interestKeywords);
+}
+
+// Process shorts page for "Show Only" mode
+function processShortsPageShowOnly(interestKeywords) {
+  const shortsElements = document.querySelectorAll('ytd-reel-video-renderer');
+  processShortsElementsShowOnly(shortsElements, interestKeywords);
+}
+
+// Process playlist page for "Show Only" mode
+function processPlaylistPageShowOnly(interestKeywords) {
+  const videoElements = document.querySelectorAll('ytd-playlist-video-renderer');
+  processVideoElementsShowOnly(videoElements, interestKeywords);
+}
+
+// Process a collection of video elements for "Show Only" mode
+function processVideoElementsShowOnly(videoElements, interestKeywords) {
   videoElements.forEach(videoElement => {
-    // Skip already processed elements
-    if (videoElement.hasAttribute('data-yt-content-blocker-processed')) {
+    // Skip already processed elements for this cycle
+    if (videoElement.hasAttribute('data-yt-content-blocker-show-only-processed')) {
       return;
     }
     
-    // Mark as processed to avoid repeated processing
-    videoElement.setAttribute('data-yt-content-blocker-processed', 'true');
+    // Mark as processed for this cycle
+    videoElement.setAttribute('data-yt-content-blocker-show-only-processed', 'true');
     
     // Get video title
     const titleElement = videoElement.querySelector('#video-title, .title-wrapper h3, .title');
@@ -229,23 +330,105 @@ function processVideoElements(videoElements, blockedKeywords, blockedCreators) {
     const channelElement = videoElement.querySelector('#channel-name a, #metadata a, .ytd-channel-name a');
     const channelName = channelElement?.textContent?.trim() || '';
     
+    // Get video description if available
+    const descriptionElement = videoElement.querySelector('#description, #description-text, .description');
+    const description = descriptionElement?.textContent?.trim() || '';
+    
     if (videoTitle && channelName) {
-      const blockInfo = shouldBlockVideo(videoTitle, channelName, blockedKeywords, blockedCreators);
-      if (blockInfo.shouldBlock) {
-        // Apply appropriate blocking mode
-        applyBlockingMode(videoElement, blockInfo);
-        
-        // Log the blocked video
-        logBlockedVideo({
-          title: videoTitle,
-          creator: channelName,
-          matchedKeyword: blockInfo.matchedKeyword,
-          matchedCreator: blockInfo.matchedCreator,
-          pageType: window.location.pathname
-        });
+      // Get video ID if possible (for caching LLM results)
+      let videoId = '';
+      const linkElement = videoElement.querySelector('a#thumbnail');
+      if (linkElement && linkElement.href) {
+        const match = linkElement.href.match(/(?:v=|\/)([\w-]{11})(?:\?|&|\/|$)/);
+        if (match) {
+          videoId = match[1];
+        }
       }
+      
+      // Video data object to pass to the LLM API
+      const videoData = {
+        videoId: videoId,
+        title: videoTitle,
+        channelName: channelName,
+        description: description
+      };
+      
+      // Check if this video is of interest using LLM API
+      checkVideoRelevance(videoData, interestKeywords, (isRelated, matchedKeyword) => {
+        if (!isRelated) {
+          // If video is not related to any interest keywords, hide it
+          applyShowOnlyMode(videoElement, false);
+        } else {
+          // If video is related, make sure it's visible and highlight it
+          applyShowOnlyMode(videoElement, true, matchedKeyword);
+        }
+      });
     }
   });
+  
+  // Reset the processed state for all elements after processing is complete
+  // This allows for reprocessing when filter criteria change
+  setTimeout(() => {
+    videoElements.forEach(el => {
+      el.removeAttribute('data-yt-content-blocker-show-only-processed');
+    });
+  }, 100);
+}
+
+// Process shorts elements for "Show Only" mode
+function processShortsElementsShowOnly(shortsElements, interestKeywords) {
+  shortsElements.forEach(shortsElement => {
+    // Skip already processed elements
+    if (shortsElement.hasAttribute('data-yt-content-blocker-show-only-processed')) {
+      return;
+    }
+    
+    // Mark as processed
+    shortsElement.setAttribute('data-yt-content-blocker-show-only-processed', 'true');
+    
+    // Get video title
+    const titleElement = shortsElement.querySelector('#video-title');
+    const videoTitle = titleElement?.textContent?.trim() || '';
+    
+    // Get channel name
+    const channelElement = shortsElement.querySelector('#channel-name a, #text-container a');
+    const channelName = channelElement?.textContent?.trim() || '';
+
+    if (videoTitle && channelName) {
+      // Get video ID if possible
+      let videoId = '';
+      const match = window.location.href.match(/shorts\/([\w-]{11})/);
+      if (match) {
+        videoId = match[1];
+      }
+      
+      // Video data object
+      const videoData = {
+        videoId: videoId,
+        title: videoTitle,
+        channelName: channelName,
+        description: ''
+      };
+      
+      // Check if this short is of interest
+      checkVideoRelevance(videoData, interestKeywords, (isRelated, matchedKeyword) => {
+        if (!isRelated) {
+          // If not related, hide it
+          applyShowOnlyMode(shortsElement, false);
+        } else {
+          // If related, make sure it's visible
+          applyShowOnlyMode(shortsElement, true, matchedKeyword);
+        }
+      });
+    }
+  });
+  
+  // Reset the processed state
+  setTimeout(() => {
+    shortsElements.forEach(el => {
+      el.removeAttribute('data-yt-content-blocker-show-only-processed');
+    });
+  }, 100);
 }
 
 // Apply the selected blocking mode to a video element
@@ -600,7 +783,8 @@ function addBlockedContentStyles() {
     }
     
     /* Smooth transition for any elements we hide */
-    [data-yt-content-blocker-processed="true"] {
+    [data-yt-content-blocker-processed="true"],
+    [data-yt-content-blocker-show-only-processed="true"] {
       transition: opacity 0.3s ease, filter 0.3s ease;
     }
     
@@ -610,6 +794,23 @@ function addBlockedContentStyles() {
       top: 0;
       z-index: 9000;
       width: 100%;
+    }
+    
+    /* Styling for interest match highlighting */
+    .yt-content-blocker-interest-match {
+      outline: 2px solid rgba(0, 128, 255, 0.5);
+      outline-offset: -2px;
+      position: relative;
+    }
+    
+    /* Badge animation */
+    .yt-content-blocker-badge {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     /* Make overlay responsive */
@@ -689,8 +890,66 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Extract channel directly from DOM element
     const channelName = getChannelFromElement(message.data.linkUrl);
     sendResponse({ channelName });
+  } else if (message.action === 'getCreatorFromContext') {
+    // Extract creator name from current page or URL
+    const creatorName = extractCreatorFromPage(message.url);
+    if (creatorName) {
+      chrome.storage.sync.get(['blockedCreators'], (result) => {
+        const blockedCreators = result.blockedCreators || [];
+        if (!blockedCreators.includes(creatorName)) {
+          blockedCreators.push(creatorName);
+          chrome.storage.sync.set({ blockedCreators }, () => {
+            processYouTubeVideos();
+          });
+        }
+      });
+    }
   }
   
   // Must return true if we want to send a response asynchronously
   return true;
 });
+
+// Extract creator name from YouTube page or URL
+function extractCreatorFromPage(url) {
+  // Try to extract from URL first
+  if (url) {
+    const urlMatch = url.match(/youtube\.com\/(?:c\/|channel\/|user\/|@)([^\/\?]+)/);
+    if (urlMatch) {
+      return urlMatch[1];
+    }
+  }
+  
+  // Try to extract from current page
+  const channelName = document.querySelector('#owner-name a, #channel-name a, .ytd-channel-name a, .yt-simple-endpoint.ytd-video-owner-renderer')?.textContent?.trim();
+  if (channelName) {
+    return channelName;
+  }
+  
+  // Fallback: try to get from meta tags
+  const channelMeta = document.querySelector('meta[property="og:video:author"]')?.content;
+  if (channelMeta) {
+    return channelMeta;
+  }
+  
+  return null;
+}
+
+// Start processing when the page loads
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(processYouTubeVideos, 1000);
+  });
+} else {
+  setTimeout(processYouTubeVideos, 1000);
+}
+
+// Also process when navigation occurs (YouTube is a SPA)
+let lastUrl = location.href;
+new MutationObserver(() => {
+  const url = location.href;
+  if (url !== lastUrl) {
+    lastUrl = url;
+    setTimeout(processYouTubeVideos, 2000);
+  }
+}).observe(document, { subtree: true, childList: true });

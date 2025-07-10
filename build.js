@@ -21,6 +21,7 @@ const filesToCopy = [
   'options.css',
   'options.js',
   'utility.js',
+  'llm-api.js',
   'guide.html',
   'icons'
 ];

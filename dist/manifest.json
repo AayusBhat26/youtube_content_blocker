@@ -16,20 +16,20 @@
       "128": "icons/icon128.png"
     }
   },
-  "options_page": "options.html",
-  "permissions": [
+  "options_page": "options.html",  "permissions": [
     "storage",
     "scripting"
   ],
   "host_permissions": [
-    "https://*.youtube.com/*"
+    "https://*.youtube.com/*",
+    "https://api-inference.huggingface.co/*"
   ],
   "background": {
     "service_worker": "background.js"
   },  "content_scripts": [
     {
       "matches": ["https://*.youtube.com/*"],
-      "js": ["utility.js", "content.js"],
+      "js": ["utility.js", "llm-api.js", "content.js"],
       "run_at": "document_idle"
     }
   ]

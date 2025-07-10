@@ -5,11 +5,20 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="popup.css">
 </head>
-<body>
-  <div class="container">
+<body>  <div class="container">
     <h1>YouTube Content Blocker</h1>
+      <div class="filter-mode-selector">
+      <label>
+        <input type="radio" name="filterMode" value="block" checked> 
+        <span>Block Mode</span>
+      </label>
+      <label>
+        <input type="radio" name="filterMode" value="show"> 
+        <span>Show Only Mode</span>
+      </label>
+    </div>
     
-    <div class="section">
+    <div class="section block-mode-section">
       <h2>Blocked Keywords</h2>
       <div class="input-group">
         <input type="text" id="keyword-input" placeholder="Enter keyword to block">
@@ -18,13 +27,24 @@
       <ul id="keyword-list" class="list-container"></ul>
     </div>
     
-    <div class="section">
+    <div class="section block-mode-section">
       <h2>Blocked Creators</h2>
       <div class="input-group">
         <input type="text" id="creator-input" placeholder="Enter channel name to block">
         <button id="add-creator">Add</button>
       </div>
       <ul id="creator-list" class="list-container"></ul>
+    </div>
+    
+    <div class="section show-mode-section" style="display: none;">
+      <h2>Interest Keywords</h2>
+      <p class="description">Videos containing or related to these keywords will be shown, others will be hidden</p>
+      <div class="input-group">
+        <input type="text" id="interest-keyword-input" placeholder="Enter interest keyword">
+        <button id="add-interest-keyword">Add</button>
+      </div>
+      <ul id="interest-keyword-list" class="list-container"></ul>
+      <p class="api-note">Note: Uses AI to find related content. Processing may take a moment.</p>
     </div>
       <div class="footer">
       <div class="switch-container">

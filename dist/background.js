@@ -1,6 +1,6 @@
 // Set default values when the extension is installed
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get(['blockedKeywords', 'blockedCreators', 'enabled'], (result) => {
+  chrome.storage.sync.get(['blockedKeywords', 'blockedCreators', 'interestKeywords', 'filterMode', 'enabled'], (result) => {
     // Set default blocked keywords if not already set
     if (!result.blockedKeywords) {
       chrome.storage.sync.set({ blockedKeywords: [] });
@@ -9,6 +9,16 @@ chrome.runtime.onInstalled.addListener(() => {
     // Set default blocked creators if not already set
     if (!result.blockedCreators) {
       chrome.storage.sync.set({ blockedCreators: [] });
+    }
+    
+    // Set default interest keywords if not already set
+    if (!result.interestKeywords) {
+      chrome.storage.sync.set({ interestKeywords: [] });
+    }
+    
+    // Set default filter mode (block or show)
+    if (!result.filterMode) {
+      chrome.storage.sync.set({ filterMode: 'block' }); // 'block' or 'show'
     }
     
     // Set default enabled state if not already set

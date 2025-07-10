@@ -79,9 +79,7 @@
         <div class="option-group">
           <button id="reset-stats">Reset Statistics</button>
         </div>
-      </section>
-
-      <section class="option-section">
+      </section>      <section class="option-section">
         <h2>Performance</h2>
         <div class="option-group">
           <label for="scan-interval">
@@ -89,6 +87,35 @@
             <input type="number" id="scan-interval" min="500" max="5000" step="100" value="1000">
           </label>
           <p class="description">How often to check for new videos (lower = more responsive, higher = better performance)</p>
+        </div>
+      </section>
+
+      <section class="option-section">
+        <h2>AI Content Analysis</h2>
+        <div class="option-group">
+          <label for="llm-api-key">
+            HuggingFace API Key:
+            <input type="password" id="llm-api-key" placeholder="Enter your free HuggingFace API key">
+          </label>
+          <p class="description">
+            Get a free API key at <a href="https://huggingface.co/settings/tokens" target="_blank">huggingface.co</a> for AI-powered content matching
+          </p>
+        </div>
+        <div class="option-group">
+          <label for="llm-confidence-threshold">
+            Match Confidence Threshold:
+            <input type="range" id="llm-confidence-threshold" min="0.5" max="0.9" step="0.05" value="0.65">
+            <span id="confidence-value">0.65</span>
+          </label>
+          <p class="description">Higher values mean more precise but fewer matches</p>
+        </div>
+        <div class="option-group">
+          <label for="use-local-api">
+            <input type="checkbox" id="use-local-api">
+            Use local API server (advanced)
+          </label>
+          <input type="text" id="local-api-url" placeholder="http://localhost:8080/v1/completions" disabled>
+          <p class="description">For users who want to self-host the AI model</p>
         </div>
       </section>
     </main>

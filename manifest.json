@@ -19,17 +19,21 @@
   "options_page": "options.html",
   "permissions": [
     "storage",
-    "scripting"
+    "scripting",
+    "activeTab",
+    "contextMenus"
   ],
   "host_permissions": [
-    "https://*.youtube.com/*"
+    "https://*.youtube.com/*",
+    "https://api-inference.huggingface.co/*"
   ],
   "background": {
     "service_worker": "background.js"
-  },  "content_scripts": [
+  },
+  "content_scripts": [
     {
       "matches": ["https://*.youtube.com/*"],
-      "js": ["utility.js", "content.js"],
+      "js": ["utility.js", "llm-api.js", "content.js"],
       "run_at": "document_idle"
     }
   ]
